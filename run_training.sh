@@ -1,11 +1,10 @@
 #!/bin/bash
-export TRAIN_FILE=train
-export EVAL_FILE=test
-# run_language_modeling_with_tokenizers.py -- it's the version with support for fast tokenizers, see above
+export TRAIN_FILE=../data/pre-train/train
+export EVAL_FILE=../data/pre-train/test
 python run_language_modelling_edits.py \
     --train_data_file $TRAIN_FILE \
     --eval_data_file $EVAL_FILE \
-    --output_dir ./bnc_roberta \
+    --output_dir ../bnc_roberta \
     --model_name_or_path roberta-base \
     --model_type roberta \
     --mlm \

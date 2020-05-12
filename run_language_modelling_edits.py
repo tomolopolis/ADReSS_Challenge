@@ -19,6 +19,8 @@ GPT and GPT-2 are fine-tuned using a causal language modeling (CLM) loss while B
 using a masked language modeling (MLM) loss.
 """
 
+"Adpated script from https://github.com/huggingface/transformers/blob/master/examples/language-modeling/run_language_modeling.py"
+
 
 import logging
 import math
@@ -26,6 +28,7 @@ import os
 from dataclasses import dataclass, field
 from typing import Optional
 from torch.utils.data import Dataset
+import torch
 
 from transformers import (
     CONFIG_MAPPING,
@@ -35,7 +38,6 @@ from transformers import (
     AutoTokenizer,
     DataCollatorForLanguageModeling,
     HfArgumentParser,
-    # LineByLineTextDataset,
     PreTrainedTokenizer,
     TextDataset,
     Trainer,
@@ -52,31 +54,31 @@ MODEL_TYPES = tuple(conf.model_type for conf in MODEL_CONFIG_CLASSES)
 
 
 class LineByLineTextDataset(Dataset):
-    def __init__(self, t: PreTrainedTokenizer, args, file_path: str, block_size=512):
+    def __init__(self, tokenizer: PreTrainedTokenizer, file_path: str, args, block_size=512):
         assert os.path.isfile(file_path)
         logger.info("Creating features from dataset file at %s", file_path)
         
         # -------------------------- CHANGES START
-        bert_tokenizer = os.path.join(args.tokenizer_name, "vocab.txt")
-        if os.path.exists(bert_tokenizer):
-            logger.info("Loading BERT tokenizer")
-            from tokenizers import BertWordPieceTokenizer
-            tokenizer = BertWordPieceTokenizer(os.path.join(args.tokenizer_name, "vocab.txt"), handle_chinese_chars=False, lowercase=False)
-            tokenizer.enable_truncation(512)
-        else:
-            from tokenizers import ByteLevelBPETokenizer
-            from tokenizers.processors import BertProcessing
-            logger.info("Loading RoBERTa tokenizer")
+#         bert_tokenizer = os.path.join(args.tokenizer_name, "vocab.txt")
+#         if os.path.exists(bert_tokenizer):
+#             logger.info("Loading BERT tokenizer")
+#             from tokenizers import BertWordPieceTokenizer
+#             tokenizer = BertWordPieceTokenizer(os.path.join(args.tokenizer_name, "vocab.txt"), handle_chinese_chars=False, lowercase=False)
+#             tokenizer.enable_truncation(512)
+#         else:
+        from tokenizers import ByteLevelBPETokenizer
+        from tokenizers.processors import BertProcessing
+        logger.info("Loading RoBERTa tokenizer")
             
-            tokenizer = ByteLevelBPETokenizer(
-                os.path.join(args.tokenizer_name, "vocab.json"),
-                os.path.join(args.tokenizer_name, "merges.txt")
-            )
-            tokenizer._tokenizer.post_processor = BertProcessing(
-                ("</s>", tokenizer.token_to_id("</s>")),
-                ("<s>", tokenizer.token_to_id("<s>")),
-            )
-            tokenizer.enable_truncation(max_length=512)
+        tokenizer = ByteLevelBPETokenizer(
+            os.path.join('bnc_roberta_config', "vocab.json"),
+            os.path.join('bnc_roberta_config', "merges.txt")
+        )
+        tokenizer._tokenizer.post_processor = BertProcessing(
+            ("</s>", tokenizer.token_to_id("</s>")),
+            ("<s>", tokenizer.token_to_id("<s>")),
+        )
+        tokenizer.enable_truncation(max_length=512)
 
         logger.info("Reading file %s", file_path)
         with open(file_path, encoding="utf-8") as f:
@@ -161,9 +163,7 @@ class DataTrainingArguments:
 def get_dataset(args: DataTrainingArguments, tokenizer: PreTrainedTokenizer, evaluate=False, local_rank=-1):
     file_path = args.eval_data_file if evaluate else args.train_data_file
     if args.line_by_line:
-        return LineByLineTextDataset(
-            tokenizer=tokenizer, file_path=file_path, block_size=args.block_size, local_rank=local_rank
-        )
+        return LineByLineTextDataset(tokenizer=tokenizer, file_path=file_path, args=args, block_size=args.block_size)
     else:
         return TextDataset(
             tokenizer=tokenizer, file_path=file_path, block_size=args.block_size, local_rank=local_rank,

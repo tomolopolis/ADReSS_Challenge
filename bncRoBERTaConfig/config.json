@@ -1,0 +1,5 @@
+{
+ "architectures": ["RobertaForMaskedLM"], 
+ "max_position_embeddings": 514, 
+ "vocab_size": 50265
+}
