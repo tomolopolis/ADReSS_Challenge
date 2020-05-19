@@ -36,5 +36,8 @@ $ jupyter lab
 2. Open the 'Analysis.ipynb' notebook. 
 3. Top right corner, select the adress_chlng kernel, run all cells.
 
-
+## RoBERTa / BERT Language Model Fine Tuning
+1. First get access to the [BNC corpus](https://www.english-corpora.org/bnc/)
+2. Place unzipped corpus into ../data/bnc2014spoken-xml 
+3. Open and run notebook Fine-Tune-LanguageModel.ipynb, to clean bnc corpus, apply 4 sentence sliding window, train BBPE tokenizer and output LM fine tuning config, finally runs the training script that is largely replicated from the training script provided by huggingface.
 
