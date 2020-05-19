@@ -1,4 +1,4 @@
-# ADReSS_Challenge
+# Interspeech 2020 - Alzheimer's Dementia Recognition through Spontaneous Speech Challenge
 Repo for code / analysis for my submission to the Interspeech 2020 [ADReSS Challenge](http://www.homepages.ed.ac.uk/sluzfil/ADReSS/)
 
 To re-run the analysis presented:
