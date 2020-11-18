@@ -3,7 +3,7 @@ jupyter-core==4.6.3
 jupyterlab==1.2.6
 jupyterlab-server==1.1.0
 matplotlib==3.2.1
-notebook==6.0.1
+notebook==6.1.5
 numpy==1.18.3
 pandas==1.0.3
 pandocfilters==1.4.2
