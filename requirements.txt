@@ -4,7 +4,7 @@ jupyterlab==1.2.21
 jupyterlab-server==1.1.0
 matplotlib==3.2.1
 notebook==6.4.1
-numpy==1.18.3
+numpy==1.22.0
 pandas==1.0.3
 pandocfilters==1.4.2
 psutil==5.7.0
