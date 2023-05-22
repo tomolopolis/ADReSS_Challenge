@@ -17,7 +17,7 @@ pytz==2019.3
 PyYAML==5.4
 pyzmq==18.1.1
 QtPy==1.9.0
-requests==2.23.0
+requests==2.31.0
 ruamel-yaml==0.15.87
 scipy==1.4.1
 Send2Trash==1.5.0
