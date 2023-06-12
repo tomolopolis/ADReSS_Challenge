@@ -37,7 +37,7 @@ wcwidth==0.1.9
 xlrd==1.2.0
 zipp==2.2.0
 regex==2020.10.11
-transformers==3.3.1
+transformers==4.30.0
 spacy==2.3.2
 sklearn_crfsuite==0.3.6
 xgboost==1.2.1
